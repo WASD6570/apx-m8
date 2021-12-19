@@ -7,7 +7,7 @@ import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
 import main from "../../styles/bulma.css";
 
-export function LogInForm() {
+export function LogInForm(props) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [inputStyles, setInputStyles] = useState(["input", "mb-2", "is-info"]);
@@ -42,12 +42,16 @@ export function LogInForm() {
 
   return (
     <ModalCard
+      state={props.showModalState}
+      toggleOffModal={props.setShowModalCb}
       title="Inicia sesion"
       footer={
-        <p>
-          No tienes una cuenta todavia?{" "}
-          <a onClick={handleMountSignIn}>Crea una ahora!</a>
-        </p>
+        <>
+          <p>No tienes una cuenta todavia? </p>
+          <div className={main["has-text-link"]} onClick={handleMountSignIn}>
+            Crea una ahora!
+          </div>
+        </>
       }
     >
       <TextField

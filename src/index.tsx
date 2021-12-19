@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { AppRoutes } from "./router";
 import { RecoilRoot } from "recoil";
 import { BrowserRouter } from "react-router-dom";
-import { Layout } from "./components/layout";
 import { userDataState } from "./hooks/user";
+import { Fallback } from "./components/ui/fallback";
 
 function loadLocalData() {
   const dataTemplate = {
@@ -33,7 +33,7 @@ ReactDOM.render(
         set(userDataState, loadLocalData());
       }}
     >
-      <Suspense fallback={<Layout loading={true}></Layout>}>
+      <Suspense fallback={<Fallback loading={true} />}>
         <AppRoutes />
       </Suspense>
     </RecoilRoot>

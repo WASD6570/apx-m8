@@ -7,7 +7,7 @@ import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
 import main from "../../styles/bulma.css";
 
-export function SignInForm() {
+export function SignInForm(props) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [checkPass, setCheckPass] = useState("");
@@ -47,12 +47,16 @@ export function SignInForm() {
 
   return (
     <ModalCard
+      state={props.showModalState}
+      toggleOffModal={props.setShowModalCb}
       title="Crear una cuenta"
       footer={
-        <p>
-          Ya tienes una cuenta?{" "}
-          <a onClick={handleMountSignIn}>Inicia sesion!</a>
-        </p>
+        <>
+          <p>Ya tienes una cuenta? </p>
+          <div className={main["has-text-link"]} onClick={handleMountSignIn}>
+            Inicia sesion!
+          </div>
+        </>
       }
     >
       <TextField

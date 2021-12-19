@@ -3,52 +3,48 @@ import { BallTriangle } from "react-loading-icons";
 
 import main from "../../../styles/bulma.css";
 import css from "./index.css";
-import { useSetModalState, useGetModalState } from "../../../hooks/modal";
-import { Buttons } from "../buttons";
 
 type test = {
   click: (boolean: boolean) => boolean;
 };
 
 function ModalCard(props: any) {
-  const setModalState = useSetModalState();
-  const modalState = useGetModalState();
-
   function handleClick() {
-    setModalState(false);
+    props.toggleOffModal(false);
   }
 
   const modalActive = [main.modal, main["is-active"]].join(" ");
   const modalInactive = main.modal;
   return (
-    <div className={modalState ? modalActive : modalInactive}>
+    <div className={props.state ? modalActive : modalInactive}>
       <div className={main["modal-background"]}></div>
       <div className={[main["modal-card"], css.root].join(" ")}>
         <header
           className={[
             main["modal-card-head"],
             main["is-flex"],
-            main["is-flex-direction-row"],
-            main["is-justify-content-center"],
+            main["is-flex-direction-column"],
+            main["is-justify-content-flex-start"],
           ].join(" ")}
         >
           <p className={main["modal-card-title"]}>{props.title}</p>
-          <Buttons
-            buttonName=""
-            styles={["delete"]}
-            click={handleClick}
-          ></Buttons>
-        </header>
-        <Suspense fallback={<BallTriangle stroke={"#00d1b2"}></BallTriangle>}>
-          <section
-            className={[
-              main["modal-card-body"],
-              main["has-text-centered"],
-            ].join(" ")}
+          <p
+            className={[main["subtitle"], main["is-5"], css.subtitle].join(" ")}
           >
-            {props.children}
-          </section>
-        </Suspense>
+            {props.subtitle}
+          </p>
+          <div
+            className={[main["delete"], css.delete].join(" ")}
+            onClick={handleClick}
+          ></div>
+        </header>
+        <section
+          className={[main["modal-card-body"], main["has-text-centered"]].join(
+            " "
+          )}
+        >
+          {props.children}
+        </section>
         <footer
           className={[
             main["modal-card-foot"],

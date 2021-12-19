@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useGetNearByPets } from "../../hooks/user";
+import { Card } from "../../components/ui/card";
 
 function MascotasPerdidas() {
   const pets = useGetNearByPets();
@@ -14,7 +15,14 @@ function MascotasPerdidas() {
         <div>no hay mascotas cerca tuyo</div>
       ) : (
         pets?.map((p) => {
-          return <li key={p.name}>{p.name}</li>;
+          return (
+            <Card
+              key={p.objectID}
+              description={p.description}
+              name={p.name}
+              pictureURL={p.pictureURL}
+            />
+          );
         })
       )}
     </ul>

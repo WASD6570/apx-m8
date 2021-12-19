@@ -7,13 +7,10 @@ import { MascotasPerdidas } from "../pages/mascotas-cerca";
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Layout loading={false} />}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
       </Route>
-      <Route
-        path="/mascotas-perdidas-cerca-tuyo"
-        element={<Layout loading={false} />}
-      >
+      <Route path="/mascotas-perdidas-cerca-tuyo" element={<Layout />}>
         <Route index element={<MascotasPerdidas />} />
       </Route>
     </Routes>
