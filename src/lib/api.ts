@@ -57,4 +57,20 @@ async function mascotasCercaTuyo({ lat, lng }): Promise<Array<any>> {
   }
 }
 
-export { logIn, mascotasCercaTuyo };
+async function reportPet({ name, id, description, email, phone, token }) {
+  const body = { name, id, description, email, phone };
+  const response = await fetch(
+    `${API_BASE_URL}/user/send-report`,
+    requestOptions({
+      body: body,
+      method: "POST",
+      authToken: token,
+    })
+  );
+  const parsedResponse = await response.json();
+  console.log("log en api.ts", response.status, parsedResponse);
+
+  return response.status;
+}
+
+export { logIn, mascotasCercaTuyo, reportPet };

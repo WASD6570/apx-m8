@@ -4,19 +4,36 @@ import main from "../../../styles/bulma.css";
 import css from "./index.css";
 import { Buttons } from "../buttons";
 import { ModalCard } from "../modal-card";
+import { TextField } from "../text-field";
+import { useSendReport } from "../../../hooks/report";
 
 type cardProps = {
   pictureURL: string;
   description: string;
   name: string;
+  id: any;
 };
 
 export function Card(props: cardProps) {
   const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [description, setDescription] = useState("");
+  const reportPet = useSendReport();
 
   function handleClick() {
     setShowModal(true);
   }
+
+  function handleSend() {
+    console.log("clickearon enviar");
+
+    reportPet({ name, description, phone, id: props.id });
+  }
+  function handleCancel() {
+    setShowModal(false);
+  }
+
   return (
     <section className={css["mmr-page-body"]}>
       <div className={[css["card"], main["box"]].join(" ")}>
@@ -48,11 +65,61 @@ export function Card(props: cardProps) {
               ]}
             ></Buttons>
             <ModalCard
+              footer={
+                <div
+                  className={[
+                    main["is-flex"],
+                    main["is-flex-direction-row"],
+                  ].join(" ")}
+                >
+                  <Buttons
+                    buttonName="enviar"
+                    click={handleSend}
+                    styles={["button", "is-link", "m-2"]}
+                  ></Buttons>
+                  <Buttons
+                    buttonName="cancelar"
+                    click={handleCancel}
+                    styles={["button", "is-danger", "m-2"]}
+                  ></Buttons>
+                </div>
+              }
               subtitle={"nueva info sobre " + props.name}
               state={showModal}
               toggleOffModal={setShowModal}
               title={"Reportar"}
-            ></ModalCard>
+            >
+              <TextField
+                label="Nombre"
+                type="text"
+                placeholder="Tu nombre"
+                name="nombre"
+                styles={["input", "is-info", "m-2"]}
+                callback={(data) => {
+                  setName(data);
+                }}
+              ></TextField>
+              <TextField
+                label="Telefono"
+                type="text"
+                placeholder="Tu celular"
+                name="telefono"
+                styles={["input", "is-info", "m-2"]}
+                callback={(data) => {
+                  setPhone(data);
+                }}
+              ></TextField>
+              <TextField
+                label="Descripcion"
+                textArea={true}
+                placeholder="Descripcion"
+                name="description"
+                styles={["textarea", "is-info", "m-2"]}
+                callback={(data) => {
+                  setDescription(data);
+                }}
+              ></TextField>
+            </ModalCard>
           </div>
         </div>
       </div>

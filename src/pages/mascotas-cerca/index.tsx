@@ -17,6 +17,7 @@ function MascotasPerdidas() {
         pets?.map((p) => {
           return (
             <Card
+              id={p.objectID}
               key={p.objectID}
               description={p.description}
               name={p.name}
