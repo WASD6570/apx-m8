@@ -8,7 +8,16 @@ import {
   useResetRecoilState,
 } from "recoil";
 import { createPet } from "../lib/api";
-import { useGetUserData } from "../hooks/user";
+import { useGetUserData, userDataState } from "../hooks/user";
+
+type petReport = {
+  name: string;
+  description: string;
+  petPicture: any;
+  lat: any;
+  lng: any;
+  isLost: boolean;
+};
 
 const petReportState = atom({
   key: "petReportState",
@@ -19,6 +28,19 @@ const petReportState = atom({
     lat: null,
     lng: null,
     isLost: true,
+  },
+});
+
+const petRequest = selector({
+  key: "petRequest",
+  get: async ({ get }) => {
+    const petData = get(petReportState);
+    const token = get(userDataState)["token"];
+    const pet = await createPet(petData, token);
+    return pet;
+  },
+  set: ({ set }, newValue: petReport) => {
+    return set(petReportState, newValue);
   },
 });
 
