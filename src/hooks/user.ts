@@ -5,10 +5,9 @@ import {
   useSetRecoilState,
   useRecoilValue,
   useRecoilState,
-  selectorFamily,
   useResetRecoilState,
 } from "recoil";
-import { logIn, mascotasCercaTuyo } from "../lib/api";
+import { logIn, mascotasCercaTuyo, getUserPets, createUser } from "../lib/api";
 
 const LOCAL_DATA = "localData";
 
@@ -18,7 +17,6 @@ type customRecoilState = {
   lng: number;
   email: string;
   password: string;
-  userPets: string;
 };
 
 const userDataState = atom({
@@ -29,7 +27,13 @@ const userDataState = atom({
     lng: null,
     email: null,
     password: null,
-    userPets: null,
+  },
+});
+
+const userPetsState = atom({
+  key: "userPetsState",
+  default: {
+    userPets: [],
   },
 });
 
@@ -110,11 +114,14 @@ function useGetNearByPets() {
 }
 
 //loguea al usuario SI SOLO SI no hay token Y HAY email y password
-//reaccional al cambio del state solamente
+//reaccional al cambio del state solamente, SOLO PARA LOGIN
 function useGetToken() {
   const [state, setState] = useRecoilState(stateSelector);
   const token = useRecoilValue(tokenState);
   useEffect(() => {
+    if (token === "no token") {
+      return setState(state);
+    }
     if (
       typeof token === "string" &&
       state.email != null &&
@@ -126,6 +133,40 @@ function useGetToken() {
   }, [state]);
 
   return;
+}
+
+function useSignin() {
+  const setUserData = useSetUserData();
+  const [startAccion, setStartAccion] = useState(false);
+  const [data, setSigninData] = useState({ email: null, password: null });
+  useEffect(() => {
+    if (data.email != null && data.password != null && startAccion !== false) {
+      createUser(data.email, data.password).then((res) => {
+        if (res.status === 200) {
+          setUserData((p) => ({
+            ...p,
+            email: data.email,
+            password: data.password,
+            token: res.token,
+          }));
+        } else window.alert("ya existe ese mail");
+      });
+    } else return setStartAccion(false);
+  }, [startAccion]);
+  return { setSigninData, setStartAccion };
+}
+
+function useGetUserPets() {
+  const userData = useGetUserData();
+  const [pets, setPets] = useRecoilState(userPetsState);
+  useEffect(() => {
+    if (userData.token != null) {
+      getUserPets(userData.token).then((pets) => {
+        setPets(pets);
+      });
+    }
+  }, []);
+  return pets;
 }
 
 function useSetUserData() {
@@ -150,4 +191,6 @@ export {
   useGetNearByPets,
   useResetUserData,
   userDataState,
+  useGetUserPets,
+  useSignin,
 };

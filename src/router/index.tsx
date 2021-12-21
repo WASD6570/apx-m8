@@ -4,6 +4,7 @@ import { Layout } from "../components/layout";
 import { Home } from "../pages/home/home";
 import { MascotasPerdidas } from "../pages/mascotas-cerca";
 import { ReportarMascota } from "../pages/reportar-mascota";
+import { MisMascotasReportadas } from "../pages/mis-mascotas-reportadas";
 
 function AppRoutes() {
   return (
@@ -16,6 +17,9 @@ function AppRoutes() {
       </Route>
       <Route path="/reportar-mascota" element={<Layout />}>
         <Route index element={<ReportarMascota />} />
+      </Route>
+      <Route path="/mis-mascotas-reportadas" element={<Layout />}>
+        <Route index element={<MisMascotasReportadas />} />
       </Route>
     </Routes>
   );

@@ -1,5 +1,4 @@
 const path = require("path");
-const liveServer = require("live-server");
 // const glob = require("glob");
 // const PurgecssPlugin = require("purgecss-webpack-plugin");
 // const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -9,16 +8,10 @@ const dev = process.env.NODE_ENV === "development";
 //   src: path.join(__dirname, "src"),
 // };
 
-if (dev) {
-  liveServer.start({
-    root: "./",
-    file: "index.html",
-  });
-}
-
 module.exports = {
   mode: process.env.NODE_ENV,
   watch: dev,
+  devtool: "source-map",
   entry: "./src/index.tsx",
   // plugins: [
   //   new MiniCssExtractPlugin({

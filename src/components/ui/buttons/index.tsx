@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import main from "../../../styles/bulma.css";
-import { useSetModalState, useGetModalState } from "../../../hooks/modal";
 
 type buttonsProps = {
   buttonName?: string;
   styles: Array<string>;
-  click: () => void | null;
+  click: (...any: any) => void | null;
   children?: Array<any>;
   modal?: boolean;
 };

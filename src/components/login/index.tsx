@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useMountAuthForm } from "../../hooks/modal";
 import { useSetUserData, useGetUserData, useGetToken } from "../../hooks/user";
-import { useSetModalState } from "../../hooks/modal";
 import { ModalCard } from "../ui/modal-card";
 import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
@@ -11,9 +10,9 @@ export function LogInForm(props) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [inputStyles, setInputStyles] = useState(["input", "mb-2", "is-info"]);
+  const [passStyles, setPassStyles] = useState(["input", "mb-2", "is-info"]);
 
   const [, mountForm] = useMountAuthForm();
-  const modalState = useSetModalState();
   const userData = useGetUserData();
   const setState = useSetUserData();
   useGetToken();
@@ -32,11 +31,16 @@ export function LogInForm(props) {
 
   function handleLogIn() {
     const test = validateEmail(email);
+    if (pass.length < 4) {
+      setPassStyles(["is-danger", "input", "mb-2"]);
+      return window.alert("la contraseña debe ser mas larga");
+    }
+
     if (!test) {
       setInputStyles(["is-danger", "input", "mb-2"]);
-      return window.alert("wrong email");
+      return window.alert("email invalido");
     }
-    modalState(false);
+    props.setShowModalCb(false);
     setState({ ...userData, password: pass, email: email });
   }
 
@@ -67,7 +71,7 @@ export function LogInForm(props) {
         type="password"
         name="password"
         placeholder="password"
-        styles={inputStyles}
+        styles={passStyles}
         callback={(data) => {
           setPass(data);
         }}

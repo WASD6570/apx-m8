@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { BallTriangle } from "react-loading-icons";
 import main from "../../../styles/bulma.css";
 import css from "./index.css";
 import { Buttons } from "../buttons";

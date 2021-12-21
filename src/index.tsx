@@ -38,5 +38,5 @@ ReactDOM.render(
       </Suspense>
     </RecoilRoot>
   </BrowserRouter>,
-  document.querySelector(".root")
+  document.querySelector("#root")
 );

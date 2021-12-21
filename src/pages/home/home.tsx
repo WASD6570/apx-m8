@@ -13,6 +13,8 @@ function Home() {
   function handleGiveLocation() {
     navigator.geolocation.getCurrentPosition(
       (location) => {
+        console.log(location);
+
         let latitude = location.coords.latitude;
         let longitude = location.coords.longitude;
         setData({

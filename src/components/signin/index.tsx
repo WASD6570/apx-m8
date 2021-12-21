@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import { useMountAuthForm } from "../../hooks/modal";
-import { useSetUserData, useGetUserData, useGetToken } from "../../hooks/user";
+import { useSetUserData, useGetUserData, useSignin } from "../../hooks/user";
 import { ModalCard } from "../ui/modal-card";
-import { useSetModalState } from "../../hooks/modal";
 import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
 import main from "../../styles/bulma.css";
 
 export function SignInForm(props) {
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-  const [checkPass, setCheckPass] = useState("");
+  const [email, setEmail] = useState(null);
+  const [pass, setPass] = useState(null);
+  const [checkPass, setCheckPass] = useState(null);
   const [inputStyles, setInputStyles] = useState(["input", "mb-2", "is-info"]);
+  const [passStyles, setPassStyles] = useState(["input", "mb-2", "is-info"]);
 
   const [, mountForm] = useMountAuthForm();
-  const modalState = useSetModalState();
+  const { setSigninData, setStartAccion } = useSignin();
 
-  const userData = useGetUserData();
-  const setState = useSetUserData();
-  useGetToken();
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -38,11 +35,12 @@ export function SignInForm(props) {
       return window.alert("Email invalido");
     }
     if (pass !== checkPass) {
-      setInputStyles(["is-danger", "input", "mb2"]);
+      setPassStyles(["is-danger", "input", "mb-2"]);
       return window.alert("Las contraseñas no coinciden");
     }
-    modalState(false);
-    setState({ ...userData, password: pass, email: email });
+    setStartAccion(true);
+    setSigninData({ password: pass, email: email });
+    // props.setShowModalCb(false);
   }
 
   return (
@@ -72,7 +70,7 @@ export function SignInForm(props) {
         type="password"
         name="password"
         placeholder="password"
-        styles={inputStyles}
+        styles={passStyles}
         callback={(data) => {
           setPass(data);
         }}
@@ -81,7 +79,7 @@ export function SignInForm(props) {
         type="password"
         name="checkpassword"
         placeholder=" repite password"
-        styles={inputStyles}
+        styles={passStyles}
         callback={(data) => {
           setCheckPass(data);
         }}
