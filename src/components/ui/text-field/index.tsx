@@ -18,6 +18,7 @@ export function TextField({
   name,
   styles = ["input"],
   textArea = null,
+
   callback,
 }: textFieldProps) {
   function handleChange(e) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMountAuthForm } from "../../hooks/modal";
-import { useSetUserData, useGetUserData, useGetToken } from "../../hooks/user";
+import { useSetUserData, useGetUserData, useLogin } from "../../hooks/user";
 import { ModalCard } from "../ui/modal-card";
 import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
@@ -13,10 +13,7 @@ export function LogInForm(props) {
   const [passStyles, setPassStyles] = useState(["input", "mb-2", "is-info"]);
 
   const [, mountForm] = useMountAuthForm();
-  const userData = useGetUserData();
-  const setState = useSetUserData();
-  useGetToken();
-
+  const setLoginInfo = useLogin();
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -41,7 +38,7 @@ export function LogInForm(props) {
       return window.alert("email invalido");
     }
     props.setShowModalCb(false);
-    setState({ ...userData, password: pass, email: email });
+    setLoginInfo({ password: pass, email: email });
   }
 
   return (

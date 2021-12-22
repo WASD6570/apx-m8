@@ -1,8 +1,8 @@
 .edit {
   display: inline-block;
   position: absolute;
-  right: 10px;
-  bottom: 20px;
+  right: 1px;
+  bottom: 2px;
 }
 .mmr-page-body {
   display: flex;
@@ -13,4 +13,11 @@
 .card {
   width: 60vw;
   margin: 20px 0px;
+}
+
+.relative {
+  position: relative;
+}
+.no-margin {
+  margin: 0px !important;
 }

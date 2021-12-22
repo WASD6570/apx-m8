@@ -8,7 +8,7 @@ import {
   useResetRecoilState,
 } from "recoil";
 import { reportPet } from "../lib/api";
-import { useGetUserData } from "./user";
+import { useGetUserData, userDataState } from "./user";
 import { useState, useEffect } from "react";
 
 const reportState = atom({
@@ -21,23 +21,35 @@ const reportState = atom({
   },
 });
 
-function useSendReport() {
-  const [report, setReport] = useRecoilState(reportState);
-  const userData = useGetUserData();
-  useEffect(() => {
+const reportRequest = selector({
+  key: "reportRequest",
+  get: async ({ get }) => {
+    const report = get(reportState);
+    const token = get(userDataState)["token"];
+    const email = get(userDataState)["email"];
     if (
       report.phone != null &&
       report.description != null &&
-      userData.token != null
+      token != null &&
+      email != null
     ) {
       const fullReport = {
         ...report,
-        token: userData.token,
-        email: userData.email,
+        token,
+        email,
       };
-      reportPet(fullReport);
-    }
-  }, [report]);
+      const response = await reportPet(fullReport);
+      return response;
+    } else return false;
+  },
+  set: ({ set }, newValue: any) => {
+    set(reportState, newValue);
+  },
+});
+
+function useSendReport() {
+  const [report, setReport] = useRecoilState(reportRequest);
+  useEffect(() => {}, [report]);
 
   return setReport;
 }

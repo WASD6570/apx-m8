@@ -1,5 +1,9 @@
 import React from "react";
-import { useGetUserData, useResetUserData } from "../../hooks/user";
+import {
+  useGetUserData,
+  useResetUserData,
+  useSetUserData,
+} from "../../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { ModalCard } from "../ui/modal-card";
 
@@ -8,13 +12,13 @@ import main from "../../styles/bulma.css";
 export function Dashboard(props) {
   const userData = useGetUserData();
   const navigate = useNavigate();
-  const resetUserData = useResetUserData();
+  const reset = useResetUserData();
 
   function handleCloseSession() {
-    resetUserData();
     props.setShowModalCb(false);
-    localStorage.removeItem("localData");
     navigate("/", { replace: true });
+    reset();
+    localStorage.removeItem("localData");
     location.reload();
   }
 

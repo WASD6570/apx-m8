@@ -31,24 +31,15 @@ function requestOptions({ body, method, authToken = "" }: requestOptionsType) {
 }
 
 async function logIn(email: string, password: string): Promise<any> {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/auth/token`,
-      requestOptions({
-        body: { email: email, password: password },
-        method: "POST",
-      })
-    );
-    if (response.status === 400) {
-      window.alert("email o contraseña incorrecto");
-      return "no token";
-    }
-    const token = await response.json();
-    return token;
-  } catch (error) {
-    window.alert(error.message);
-    return;
-  }
+  const response = await fetch(
+    `${API_BASE_URL}/auth/token`,
+    requestOptions({
+      body: { email: email, password: password },
+      method: "POST",
+    })
+  );
+  const token = await response.json();
+  return { token, status: response.status };
 }
 
 async function mascotasCercaTuyo({ lat, lng }): Promise<Array<any>> {
@@ -102,7 +93,7 @@ async function getUserPets(token: string): Promise<any> {
     },
   });
   const parsedResponse = await response.json();
-  return parsedResponse;
+  return parsedResponse.pets;
 }
 
 async function createUser(email: string, password: string): Promise<any> {
@@ -117,6 +108,19 @@ async function createUser(email: string, password: string): Promise<any> {
   return { token, status: response.status };
 }
 
+async function updatePet(petInfo, token) {
+  const response = await fetch(`${API_BASE_URL}/user/update-pet`, {
+    method: "post",
+    headers: {
+      Authorization: `bearer ${token}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(petInfo),
+  });
+  const pets = await response.json();
+  return { status: response.status, pets: pets };
+}
+
 export {
   logIn,
   mascotasCercaTuyo,
@@ -124,4 +128,5 @@ export {
   createPet,
   getUserPets,
   createUser,
+  updatePet,
 };

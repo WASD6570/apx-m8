@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   atom,
   selector,
@@ -7,8 +8,8 @@ import {
   useRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { createPet } from "../lib/api";
-import { useGetUserData, userDataState } from "../hooks/user";
+import { createPet, updatePet } from "../lib/api";
+import { useGetUserData, userDataState, userPets } from "../hooks/user";
 
 type petReport = {
   name: string;
@@ -36,8 +37,10 @@ const petRequest = selector({
   get: async ({ get }) => {
     const petData = get(petReportState);
     const token = get(userDataState)["token"];
-    const pet = await createPet(petData, token);
-    return pet;
+    if (token != null && petData.name != null && petData.petPicture != null) {
+      const res = await createPet(petData, token);
+      return res;
+    } else return false;
   },
   set: ({ set }, newValue: petReport) => {
     return set(petReportState, newValue);
@@ -45,15 +48,72 @@ const petRequest = selector({
 });
 
 function useCreatePet() {
-  const [pet, setPet] = useRecoilState(petReportState);
-  const userData = useGetUserData();
+  const navigate = useNavigate();
+  const [pet, setPet] = useRecoilState(petRequest);
 
   useEffect(() => {
-    if (pet.name != null && userData.token != null) {
-      createPet(pet, userData.token);
+    if (pet?.toString()[0] == "4") {
+      return window.alert(
+        "No pudimos reportar tu mascota, reiniciá la app o recarga la página"
+      );
     }
-  }, [pet]);
+    if (pet === 200) {
+      setPet(false);
+      navigate("/mis-mascotas-reportadas", { replace: true });
+    }
+  });
+
   return setPet;
 }
 
-export { useCreatePet };
+const updatePetState = atom({
+  key: "updatePetState",
+  default: {
+    name: null,
+    description: null,
+    petPicture: null,
+    lat: null,
+    lng: null,
+    isLost: null,
+    petId: null,
+  },
+});
+
+const updateRequest = selector({
+  key: "updateRequest",
+  get: async ({ get }) => {
+    const token = get(userDataState)["token"];
+    const petData = get(updatePetState);
+    if (token != null && petData.name != null && petData.petPicture != null) {
+      const res = await updatePet(petData, token);
+      return { status: res.status, pets: res.pets };
+    } else return false;
+  },
+  set: ({ set }, newValue: any) => {
+    return set(updatePetState, newValue);
+  },
+});
+
+function useUpdatePet() {
+  const navigate = useNavigate();
+  const [pet, setPet] = useRecoilState(updateRequest);
+  const [petsState, setPetState] = useRecoilState(userPets);
+
+  useEffect(() => {
+    if (pet?.status?.toString()[0] == "4") {
+      return window.alert(
+        "No pudimos reportar tu mascota, reiniciá la app o recarga la página"
+      );
+    }
+    if (pet?.status === 200) {
+      setPetState(pet.pets);
+      navigate("/mis-mascotas-reportadas", { replace: true });
+    }
+  }, [pet]);
+
+  return setPet;
+}
+
+// { name, description, petPicture, lat, lng, isLost, petId }
+
+export { useCreatePet, useUpdatePet };

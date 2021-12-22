@@ -1,26 +1,78 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import main from "../../styles/bulma.css";
 import css from "./index.css";
 import { Buttons } from "../ui/buttons";
-import { ModalCard } from "../ui/modal-card";
 import { TextField } from "../ui/text-field";
-import { useGetUserData } from "../../hooks/user";
+import { useGetUserData, useGetUserPets } from "../../hooks/user";
 import { Map } from "../ui/map";
 import { Dropzone } from "../dropzone";
-import { useCreatePet } from "../../hooks/pet";
+import { useCreatePet, useUpdatePet } from "../../hooks/pet";
 
-export function EditableCard() {
+type editableCardProps = {
+  name?: string;
+  editPet?: boolean;
+  description?: string;
+  lat?: number;
+  lng?: number;
+  picture?: string;
+  id?: any;
+  pictureURL?: string;
+  showModal?: any;
+  updatePagePets?: any;
+};
+
+export function EditableCard(props: editableCardProps) {
   const userData = useGetUserData();
-  const setPet = useCreatePet();
+  const createPet = useCreatePet();
+  const updatePet = useUpdatePet();
+  const updatedPets = useGetUserPets();
 
   const [name, setName] = useState("");
+  const [files, setFiles] = useState([]);
   const [description, setDescription] = useState("");
-  const [petLocation, setPetLocation] = useState({ lat: null, lng: null });
+  const [petLocation, setPetLocation] = useState({
+    lat: userData.lat,
+    lng: userData.lng,
+  });
   const [picture, setPicture] = useState("");
 
-  function handleSearch(e) {
+  useEffect(() => {
+    setName(props.name);
+    setDescription(props.description);
+    setPicture(props.picture);
+    setPetLocation({ lat: props.lat, lng: props.lng });
+  }, []);
+
+  function handleCreatePet(e) {
+    try {
+      e.preventDefault();
+      if (name.length == 0)
+        return window.alert("Completá el nombre de tu mascota");
+      if (description.length == 0)
+        return window.alert("Completá la descripcion de tu mascota");
+      if (files.length == 0) return window.alert("Subí una foto de tu mascota");
+      createPet({
+        name,
+        description,
+        petPicture: picture,
+        isLost: true,
+        lng: petLocation.lng,
+        lat: petLocation.lat,
+      });
+    } catch (error) {
+      return window.alert(error.message);
+    }
+  }
+
+  function handleUpdatePet(e) {
     e.preventDefault();
-    setPet({
+    if (name.length == 0)
+      return window.alert("Completá el nombre de tu mascota");
+    if (description.length == 0)
+      return window.alert("Completá la descripcion de tu mascota");
+
+    updatePet({
+      petId: props.id,
       name,
       description,
       petPicture: picture,
@@ -28,6 +80,25 @@ export function EditableCard() {
       lng: petLocation.lng,
       lat: petLocation.lat,
     });
+    props.showModal(false);
+  }
+
+  function handleUnpublishPet(e) {
+    e.preventDefault();
+    if (name.length == 0)
+      return window.alert("Completá el nombre de tu mascota");
+    if (description.length == 0)
+      return window.alert("Completá la descripcion de tu mascota");
+    updatePet({
+      petId: props.id,
+      name,
+      description,
+      petPicture: picture,
+      isLost: false,
+      lng: petLocation.lng,
+      lat: petLocation.lat,
+    });
+    props.showModal(false);
   }
 
   return (
@@ -64,13 +135,9 @@ export function EditableCard() {
             name="descripcion"
           />
         </label>
-        <h2 className={[main["title"], main["is-5"]].join(" ")}>
+        <h2 className={[main["title"], main["is-5"], main["m-0"]].join(" ")}>
           ¿Donde se perdió?
         </h2>
-        <p className={[main["subtitle"], main["is-6"], main["m-0"]].join(" ")}>
-          Podes buscar como referencia un lugar conocido o hacer click en el
-          mapa para establecer una ubicacion
-        </p>
         <Map petLocationCb={setPetLocation} />
         <label className={[main["label"], main.box].join(" ")}>
           <h2 className={[main["title"], main["is-5"], main["m-0"]].join(" ")}>
@@ -79,31 +146,47 @@ export function EditableCard() {
           <p
             className={[main["subtitle"], main["is-6"], main["m-0"]].join(" ")}
           >
-            Arrastrá la foto aca o hace click para buscar una
+            {props.editPet
+              ? "Si no querés cambiar la foto no hace falta que subas una nueva "
+              : "Presioná acá para buscar una foto"}
           </p>
           <div className={[main["image"], main["is-2by1"]].join(" ")} id="dz-0">
-            <Dropzone pictureCb={setPicture} />
+            <Dropzone
+              pictureCb={setPicture}
+              files={files}
+              setFiles={setFiles}
+            />
           </div>
         </label>
         <div
           className={[
-            main["field"],
-            main["is-grouped"],
             main["is-flex"],
+            main["is-flex-direction-column"],
             main["is-justify-content-center"],
             main["is-align-content-center"],
           ].join(" ")}
         >
           <Buttons
             buttonName="Enviar"
-            styles={["button", "is-primary", "ml-2"]}
-            click={handleSearch}
+            styles={["button", "is-primary", "mb-2"]}
+            click={props.editPet ? handleUpdatePet : handleCreatePet}
           />
           <Buttons
             buttonName="Eliminar foto"
-            styles={["button", "is-danger", "ml-2"]}
-            click={() => {}}
+            styles={["button", "is-danger", "mb-2"]}
+            click={(e) => {
+              e.preventDefault();
+              setFiles([]);
+              setPicture("");
+            }}
           />
+          {props.editPet ? (
+            <Buttons
+              buttonName="¡¡LA ENCONTRAMOS!!"
+              styles={["button", "is-warning", "mb-2"]}
+              click={handleUnpublishPet}
+            />
+          ) : null}
         </div>
       </form>
     </div>

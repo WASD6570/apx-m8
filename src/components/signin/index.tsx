@@ -14,7 +14,7 @@ export function SignInForm(props) {
   const [passStyles, setPassStyles] = useState(["input", "mb-2", "is-info"]);
 
   const [, mountForm] = useMountAuthForm();
-  const { setSigninData, setStartAccion } = useSignin();
+  const setSigninData = useSignin();
 
   const validateEmail = (email) => {
     return String(email)
@@ -38,7 +38,6 @@ export function SignInForm(props) {
       setPassStyles(["is-danger", "input", "mb-2"]);
       return window.alert("Las contraseñas no coinciden");
     }
-    setStartAccion(true);
     setSigninData({ password: pass, email: email });
     // props.setShowModalCb(false);
   }

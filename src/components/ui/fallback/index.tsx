@@ -10,7 +10,7 @@ import { Logo } from "../logo";
 
 export function Fallback(props) {
   return (
-    <div className={[main.container].join(" ")}>
+    <div className={[main.container, css.root].join(" ")}>
       <nav
         className={[header["root"], main["navbar"]].join(" ")}
         role="navigation"

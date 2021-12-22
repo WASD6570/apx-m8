@@ -2,3 +2,10 @@
   margin-top: 25%;
   margin-bottom: 45%;
 }
+.root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}

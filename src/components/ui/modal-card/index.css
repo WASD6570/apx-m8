@@ -6,6 +6,11 @@
     width: 600px;
   }
 }
+@media (max-width: 425px) {
+  .root {
+    width: 100vw;
+  }
+}
 .delete {
   position: absolute;
   right: 15px;

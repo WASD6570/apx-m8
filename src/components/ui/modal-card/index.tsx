@@ -1,22 +1,24 @@
-import React, { useState, useEffect, Suspense } from "react";
-import { BallTriangle } from "react-loading-icons";
-
+import React from "react";
 import main from "../../../styles/bulma.css";
 import css from "./index.css";
 
-type test = {
-  click: (boolean: boolean) => boolean;
-};
-
-function ModalCard(props: any) {
+function ModalCard({
+  toggleOffModal,
+  title,
+  subtitle,
+  children,
+  haveFooter = true,
+  footer,
+  state,
+}: any) {
   function handleClick() {
-    props.toggleOffModal(false);
+    toggleOffModal(false);
   }
 
   const modalActive = [main.modal, main["is-active"]].join(" ");
   const modalInactive = main.modal;
   return (
-    <div className={props.state ? modalActive : modalInactive}>
+    <div className={state ? modalActive : modalInactive}>
       <div className={main["modal-background"]}></div>
       <div className={[main["modal-card"], css.root].join(" ")}>
         <header
@@ -27,11 +29,11 @@ function ModalCard(props: any) {
             main["is-justify-content-flex-start"],
           ].join(" ")}
         >
-          <p className={main["modal-card-title"]}>{props.title}</p>
+          <p className={main["modal-card-title"]}>{title}</p>
           <p
             className={[main["subtitle"], main["is-5"], css.subtitle].join(" ")}
           >
-            {props.subtitle}
+            {subtitle}
           </p>
           <div
             className={[main["delete"], css.delete].join(" ")}
@@ -43,18 +45,20 @@ function ModalCard(props: any) {
             " "
           )}
         >
-          {props.children}
+          {children}
         </section>
-        <footer
-          className={[
-            main["modal-card-foot"],
-            main["is-flex"],
-            main["is-flex-direction-column"],
-            main["is-justify-content-center"],
-          ].join(" ")}
-        >
-          {props.footer}
-        </footer>
+        {haveFooter ? (
+          <footer
+            className={[
+              main["modal-card-foot"],
+              main["is-flex"],
+              main["is-flex-direction-column"],
+              main["is-justify-content-center"],
+            ].join(" ")}
+          >
+            {footer}
+          </footer>
+        ) : null}
       </div>
     </div>
   );

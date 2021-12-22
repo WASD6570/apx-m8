@@ -13,15 +13,9 @@ function Home() {
   function handleGiveLocation() {
     navigator.geolocation.getCurrentPosition(
       (location) => {
-        console.log(location);
-
         let latitude = location.coords.latitude;
         let longitude = location.coords.longitude;
-        setData({
-          ...userData,
-          lat: latitude,
-          lng: longitude,
-        });
+        setData((p) => ({ ...p, lat: latitude, lng: longitude }));
       },
       (error) => {
         window.alert("no pudimos obtener tu ubicacion");

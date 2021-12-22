@@ -4,14 +4,15 @@ import css from "./index.css";
 import main from "../../styles/bulma.css";
 
 type dzProps = {
-  pictureCb: (any: any) => any;
+  pictureCb: (uri: string) => void;
   children?: Array<any>;
+  setFiles: (array: Array<any>) => void;
+  files: Array<any>;
 };
 
 export function Dropzone(props: dzProps) {
-  let initUri: ArrayBuffer | string;
-  const [files, setFiles] = useState([]);
-  const [uri, setUri] = useState(initUri);
+  const [uri, setUri] = useState("");
+
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     maxSize: 10000000,
@@ -20,10 +21,10 @@ export function Dropzone(props: dzProps) {
       let file = acceptedFiles[0];
       const reader = new FileReader();
       reader.onload = (event) => {
-        setUri(event.target.result);
+        setUri(event.target.result as string);
       };
       reader.readAsDataURL(file);
-      setFiles(
+      props.setFiles(
         acceptedFiles.map((file) => {
           return Object.assign(file, {
             preview: URL.createObjectURL(file),
@@ -33,7 +34,7 @@ export function Dropzone(props: dzProps) {
     },
   });
 
-  const thumbs = files.map((file) => (
+  const thumbs = props.files.map((file) => (
     <div className={css.thubm} key={file.name}>
       <div className={css["thumb-inner"]}>
         <img src={file.preview} className={css["dz-img"]} />
@@ -44,9 +45,9 @@ export function Dropzone(props: dzProps) {
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+      props.files.forEach((file) => URL.revokeObjectURL(file.preview));
     },
-    [files]
+    [props.files]
   );
 
   useEffect(() => {
