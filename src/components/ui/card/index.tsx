@@ -159,7 +159,7 @@ export function Card(props: cardProps) {
                 ></TextField>
                 <TextField
                   label="Telefono"
-                  type="text"
+                  type="number"
                   placeholder="Tu celular"
                   name="telefono"
                   styles={["input", "is-info", "m-2"]}

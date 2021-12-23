@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Footer } from "../../footer";
 import { MediaLogo } from "../media-logos";
 import { BallTriangle } from "react-loading-icons";

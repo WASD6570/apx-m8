@@ -6,7 +6,7 @@ import { LogInForm } from "../login/index";
 import { SignInForm } from "../signin";
 import { Logo } from "../ui/logo";
 import { useGetUserData } from "../../hooks/user";
-import { BurgerMenu, Buttons } from "../ui/buttons";
+import { BurgerMenu } from "../ui/buttons";
 import { Dashboard } from "../dashboard";
 
 export function Header(props) {

@@ -5,6 +5,7 @@ import { Home } from "../pages/home/home";
 import { MascotasPerdidas } from "../pages/mascotas-cerca";
 import { ReportarMascota } from "../pages/reportar-mascota";
 import { MisMascotasReportadas } from "../pages/mis-mascotas-reportadas";
+import { MisDatos } from "../pages/mis-datos";
 
 function AppRoutes() {
   return (
@@ -20,6 +21,9 @@ function AppRoutes() {
       </Route>
       <Route path="/mis-mascotas-reportadas" element={<Layout />}>
         <Route index element={<MisMascotasReportadas />} />
+      </Route>
+      <Route path="/mis-datos" element={<Layout />}>
+        <Route index element={<MisDatos />} />
       </Route>
     </Routes>
   );

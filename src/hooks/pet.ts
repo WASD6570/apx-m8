@@ -1,15 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  atom,
-  selector,
-  useSetRecoilState,
-  useRecoilValue,
-  useRecoilState,
-  useResetRecoilState,
-} from "recoil";
+import { atom, selector, useRecoilState } from "recoil";
 import { createPet, updatePet } from "../lib/api";
-import { useGetUserData, userDataState, userPets } from "../hooks/user";
+import { userDataState, userPets } from "../hooks/user";
 
 type petReport = {
   name: string;

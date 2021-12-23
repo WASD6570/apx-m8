@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   atom,
   selector,
@@ -6,13 +6,9 @@ import {
   useRecoilValue,
   useRecoilState,
   useResetRecoilState,
-  useRecoilRefresher_UNSTABLE,
-  selectorFamily,
 } from "recoil";
 
 import { logIn, mascotasCercaTuyo, getUserPets, createUser } from "../lib/api";
-
-const LOCAL_DATA = "localData";
 
 type customRecoilState = {
   token: string;

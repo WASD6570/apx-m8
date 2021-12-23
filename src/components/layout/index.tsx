@@ -1,9 +1,8 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
 import { Header } from "../header";
 import { Footer } from "../footer";
 import { MediaLogo } from "../ui/media-logos";
-import { BallTriangle } from "react-loading-icons";
 import main from "../../styles/bulma.css";
 import css from "./index.css";
 

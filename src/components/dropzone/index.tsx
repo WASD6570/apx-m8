@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import css from "./index.css";
-import main from "../../styles/bulma.css";
 
 type dzProps = {
   pictureCb: (uri: string) => void;

@@ -1,13 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Card } from "../../components/ui/card";
 import { useGetUserPets } from "../../hooks/user";
-import main from "../../styles/bulma.css";
 
 export function MisMascotasReportadas() {
   //@ts-ignore
   const pets = useGetUserPets();
-
-  console.log(pets);
 
   return (
     <>

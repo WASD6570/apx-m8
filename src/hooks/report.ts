@@ -1,15 +1,6 @@
-import {
-  atom,
-  selector,
-  useSetRecoilState,
-  useRecoilValue,
-  useRecoilState,
-  selectorFamily,
-  useResetRecoilState,
-} from "recoil";
+import { atom, selector, useRecoilState } from "recoil";
 import { reportPet } from "../lib/api";
-import { useGetUserData, userDataState } from "./user";
-import { useState, useEffect } from "react";
+import { userDataState } from "./user";
 
 const reportState = atom({
   key: "reportState",
@@ -49,7 +40,6 @@ const reportRequest = selector({
 
 function useSendReport() {
   const [report, setReport] = useRecoilState(reportRequest);
-  useEffect(() => {}, [report]);
 
   return setReport;
 }

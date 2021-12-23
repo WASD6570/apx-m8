@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import main from "../../styles/bulma.css";
-import css from "./index.css";
 import { Buttons } from "../ui/buttons";
 import { TextField } from "../ui/text-field";
 import { useGetUserData, useGetUserPets } from "../../hooks/user";

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  useGetUserData,
-  useResetUserData,
-  useSetUserData,
-} from "../../hooks/user";
+import { useGetUserData, useResetUserData } from "../../hooks/user";
 import { useNavigate } from "react-router-dom";
 import { ModalCard } from "../ui/modal-card";
 
@@ -41,19 +37,19 @@ export function Dashboard(props) {
         <ul className={main["menu-list"]}>
           <li>
             <div
-              className={main["m-03"]}
+              className={main["m-3"]}
               onClick={() => {
                 props.setShowModalCb(false);
-                navigate("/mis-datos", { replace: true });
+                navigate("/mascotas-perdidas-cerca-tuyo", { replace: true });
               }}
               id="mis-datos"
             >
-              Mis Datos
+              Mascotas cerca tuyo
             </div>
           </li>
           <li>
             <div
-              className={main["m-4"]}
+              className={main["m-3"]}
               onClick={() => {
                 props.setShowModalCb(false);
                 navigate("/mis-mascotas-reportadas", { replace: true });
@@ -65,7 +61,7 @@ export function Dashboard(props) {
           </li>
           <li>
             <div
-              className={main["m-03"]}
+              className={main["m-3"]}
               onClick={() => {
                 props.setShowModalCb(false);
                 navigate("/reportar-mascota", { replace: true });
@@ -73,6 +69,18 @@ export function Dashboard(props) {
               id="reportar-mascota"
             >
               Reportar <br /> mascota
+            </div>
+          </li>
+          <li>
+            <div
+              className={main["m-3"]}
+              onClick={() => {
+                props.setShowModalCb(false);
+                navigate("/mis-datos", { replace: true });
+              }}
+              id="mis-datos"
+            >
+              Mis Datos
             </div>
           </li>
         </ul>

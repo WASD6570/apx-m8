@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 const env = process.env.NODE_ENV === "development";
-let API_BASE_URL = "";
+let API_BASE_URL = "http://localhost:8080";
 if (env) {
   API_BASE_URL = "http://localhost:8080";
 }
