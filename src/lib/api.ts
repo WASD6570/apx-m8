@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV === "development";
-let API_BASE_URL = "http://localhost:8080";
+let API_BASE_URL = "https://mascotas-perdidaas.herokuapp.com/";
 if (env) {
   API_BASE_URL = "http://localhost:8080";
 }
