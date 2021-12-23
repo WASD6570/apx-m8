@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 // const glob = require("glob");
 // const PurgecssPlugin = require("purgecss-webpack-plugin");
 // const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -13,14 +14,18 @@ module.exports = {
   watch: dev,
   devtool: "source-map",
   entry: "./src/index.tsx",
-  // plugins: [
-  //   new MiniCssExtractPlugin({
-  //     filename: "[name].css",
-  //   }),
-  //   new PurgecssPlugin({
-  //     paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-  //   }),
-  // ],
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env": {
+        REACT_APP_MAPBOX_TOKEN: JSON.stringify(
+          process.env.REACT_APP_MAPBOX_TOKEN
+        ),
+      },
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
+    }),
+  ],
   module: {
     rules: [
       {

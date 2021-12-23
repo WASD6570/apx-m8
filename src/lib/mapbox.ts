@@ -1,5 +1,4 @@
-//@ts-ignore
-const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
+const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
 
 async function fetchData(value: string, lat, lng): Promise<any> {
   try {

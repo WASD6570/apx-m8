@@ -24,8 +24,6 @@ function loadLocalData() {
   return localData != null ? JSON.parse(localData) : dataTemplate;
 }
 
-console.log(loadLocalData());
-
 ReactDOM.render(
   <BrowserRouter>
     <RecoilRoot

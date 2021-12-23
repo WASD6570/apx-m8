@@ -24,7 +24,7 @@ export function Map(props: mapProps) {
   });
   const mapContainer = useRef(null);
   const map = useRef(null);
-  mapboxgl.accessToken = process.env.MAPBOX_TOKEN;
+  mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
   const marker = new mapboxgl.Marker({
     anchor: "center",
