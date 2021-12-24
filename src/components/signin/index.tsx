@@ -50,9 +50,12 @@ export function SignInForm(props) {
       footer={
         <>
           <p>Ya tienes una cuenta? </p>
-          <div className={main["has-text-link"]} onClick={handleMountSignIn}>
+          <button
+            className={[main["button"], main["is-ghost"]].join(" ")}
+            onClick={handleMountSignIn}
+          >
             Inicia sesion!
-          </div>
+          </button>
         </>
       }
     >

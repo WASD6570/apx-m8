@@ -81,7 +81,7 @@ async function createPet(petInfo: petInfo, token: string): Promise<any> {
     body: JSON.stringify(petInfo),
   });
   const parsedResponse = await response.json();
-  return response.status;
+  return { status: response.status, pets: parsedResponse };
 }
 
 async function getUserPets(token: string): Promise<any> {

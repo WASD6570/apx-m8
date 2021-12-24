@@ -49,4 +49,26 @@ function BurgerMenu(props): JSX.Element {
   );
 }
 
-export { Buttons, BurgerMenu };
+function AuthButton(props) {
+  const [showModal, setShowModal] = useState(false);
+  const arrayOfStyles: Array<string> = props.styles.map((s) => {
+    return main[s];
+  });
+  function handleClick() {
+    props.click();
+    setShowModal(true);
+  }
+  return (
+    <>
+      <button onClick={handleClick} className={arrayOfStyles.join(" ")}>
+        {props.buttonName}
+      </button>
+      {React.cloneElement(props.children, {
+        showModalState: showModal,
+        setShowModalCb: setShowModal,
+      })}
+    </>
+  );
+}
+
+export { Buttons, BurgerMenu, AuthButton };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useMountAuthForm } from "../../hooks/modal";
-import { useSetUserData, useGetUserData, useLogin } from "../../hooks/user";
+import { useLogin } from "../../hooks/user";
 import { ModalCard } from "../ui/modal-card";
 import { TextField } from "../ui/text-field";
 import { Buttons } from "../ui/buttons";
@@ -49,9 +49,12 @@ export function LogInForm(props) {
       footer={
         <>
           <p>No tienes una cuenta todavia? </p>
-          <div className={main["has-text-link"]} onClick={handleMountSignIn}>
+          <button
+            className={[main["button"], main["is-ghost"]].join(" ")}
+            onClick={handleMountSignIn}
+          >
             Crea una ahora!
-          </div>
+          </button>
         </>
       }
     >

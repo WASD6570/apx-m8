@@ -7,8 +7,16 @@ import {
   useRecoilState,
   useResetRecoilState,
 } from "recoil";
-
 import { logIn, mascotasCercaTuyo, getUserPets, createUser } from "../lib/api";
+import { useState, useCallback } from "react";
+
+function useForceUpdate() {
+  const [, setTick] = useState(0);
+  const update = useCallback(() => {
+    setTick((tick) => tick + 1);
+  }, []);
+  return update;
+}
 
 type customRecoilState = {
   token: string;
@@ -42,24 +50,20 @@ const userPetsState = selector({
       return userPets;
     } else return defaultPets;
   },
+  set: ({ set }, newValue: any) => {
+    set(userPets, newValue);
+  },
 });
 
 function useGetUserPets() {
   const pets = useRecoilValue(userPetsState);
-  const [userP, setUserP] = useRecoilState(userPets);
-  useEffect(() => {
-    setUserP(pets);
-  }, []);
-  return userP;
+  return pets;
 }
 
-// CAMBIO LA FORMA EN LA QUE SE ALMACENA LA DATA EN EL STATE
-//////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////
-// ejecuta la llamada para loguearse a la API SI SOLO SI
-// existe mail y pass en el state Y si NO EXISTE token
-
+function useListenForUserPets() {
+  const pets = useRecoilValue(userPets);
+  return pets;
+}
 // REFACTOR DEL LOGIN
 //////////////////////////////////////////////////////////////////////////////////
 const authAtom = atom({
@@ -69,6 +73,8 @@ const authAtom = atom({
     password: null,
   },
 });
+
+// Inicia sesion SOLO SI hay data valida en el authATOM
 
 const loginToken = selector({
   key: "loginToken",
@@ -96,11 +102,46 @@ function useLogin() {
       setLoginAtom({ email: null, password: null });
     }
     if (loginTokenState?.status == 400) {
+      setLoginAtom({ email: null, password: null });
       return window.alert("No existe un usuario con ese mail");
     }
     //return setLoginAtom({ email: null, password: null });
   }, [loginAtom]);
   return setLoginAtom;
+}
+// Inicia sesion SOLO SI hay data valida en el authATOM
+
+const signinToken = selector({
+  key: "signinToken",
+  get: async ({ get }) => {
+    const email = get(authAtom)["email"];
+    const password = get(authAtom)["password"];
+    if (email != null && password != null) {
+      const resObject = await createUser(email, password);
+      return resObject;
+    } else return false;
+  },
+});
+
+function useSignin() {
+  const signinTokenstate = useRecoilValue(signinToken);
+  const [signAtom, setSignAtom] = useRecoilState(authAtom);
+  const setUserData = useSetUserData();
+  useEffect(() => {
+    if (signinTokenstate?.status == 200 && signAtom.email != null) {
+      setUserData((p) => ({
+        ...p,
+        token: signinTokenstate.token,
+        email: signAtom.email,
+      }));
+      setSignAtom({ email: null, password: null });
+    }
+    if (signinTokenstate?.status == 400) {
+      setSignAtom({ email: null, password: null });
+      return window.alert("Ya existe un usuario con ese mail");
+    }
+  }, [signAtom]);
+  return setSignAtom;
 }
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -141,39 +182,6 @@ function useGetNearByPets() {
   return pets;
 }
 
-const signinToken = selector({
-  key: "signinToken",
-  get: async ({ get }) => {
-    const email = get(authAtom)["email"];
-    const password = get(authAtom)["password"];
-    if (email != null && password != null) {
-      const resObject = await createUser(email, password);
-      return resObject;
-    } else return false;
-  },
-});
-
-function useSignin() {
-  const signinTokenstate = useRecoilValue(signinToken);
-  const [signAtom, setSignAtom] = useRecoilState(authAtom);
-  const setUserData = useSetUserData();
-  useEffect(() => {
-    if (signinTokenstate?.status == 200 && signAtom.email != null) {
-      setUserData((p) => ({
-        ...p,
-        token: signinTokenstate.token,
-        email: signAtom.email,
-      }));
-      setSignAtom({ email: null, password: null });
-    }
-    if (signinTokenstate?.status == 400) {
-      return window.alert("Ya existe un usuario con ese mail");
-    }
-    //return setSignAtom({ email: null, password: null });
-  }, [signAtom]);
-  return setSignAtom;
-}
-
 function useSetUserData() {
   const setData = useSetRecoilState(stateSelector);
   return setData;
@@ -199,4 +207,6 @@ export {
   useSignin,
   useLogin,
   useResetUserData,
+  useListenForUserPets,
+  useForceUpdate,
 };

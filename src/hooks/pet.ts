@@ -43,18 +43,20 @@ const petRequest = selector({
 function useCreatePet() {
   const navigate = useNavigate();
   const [pet, setPet] = useRecoilState(petRequest);
+  const [petsState, setPetState] = useRecoilState(userPets);
 
   useEffect(() => {
-    if (pet?.toString()[0] == "4") {
+    if (pet.status?.toString()[0] == "4") {
       return window.alert(
         "No pudimos reportar tu mascota, reiniciá la app o recarga la página"
       );
     }
-    if (pet === 200) {
+    if (pet.status === 200) {
+      setPetState(pet.pets);
       setPet(false);
       navigate("/mis-mascotas-reportadas", { replace: true });
     }
-  });
+  }, [pet]);
 
   return setPet;
 }
@@ -100,6 +102,7 @@ function useUpdatePet() {
     }
     if (pet?.status === 200) {
       setPetState(pet.pets);
+      setPet(false);
       navigate("/mis-mascotas-reportadas", { replace: true });
     }
   }, [pet]);

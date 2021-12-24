@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState } from "react";
 import main from "../../../styles/bulma.css";
 import css from "./index.css";
 import { Buttons } from "../buttons";

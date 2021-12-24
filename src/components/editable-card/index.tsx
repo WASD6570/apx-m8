@@ -24,7 +24,6 @@ export function EditableCard(props: editableCardProps) {
   const userData = useGetUserData();
   const createPet = useCreatePet();
   const updatePet = useUpdatePet();
-  const updatedPets = useGetUserPets();
 
   const [name, setName] = useState("");
   const [files, setFiles] = useState([]);
@@ -36,10 +35,12 @@ export function EditableCard(props: editableCardProps) {
   const [picture, setPicture] = useState("");
 
   useEffect(() => {
-    setName(props.name);
-    setDescription(props.description);
-    setPicture(props.picture);
-    setPetLocation({ lat: props.lat, lng: props.lng });
+    if (props.editPet) {
+      setName(props.name);
+      setDescription(props.description);
+      setPicture(props.picture);
+      setPetLocation({ lat: props.lat, lng: props.lng });
+    }
   }, []);
 
   function handleCreatePet(e) {

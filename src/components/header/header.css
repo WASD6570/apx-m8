@@ -2,3 +2,14 @@
   background-color: lightcoral !important;
   width: 100vw;
 }
+
+@media (max-width: 1023px) {
+  .desktop {
+    display: none !important;
+  }
+}
+@media (min-width: 1024px) {
+  .desktop {
+    display: block;
+  }
+}

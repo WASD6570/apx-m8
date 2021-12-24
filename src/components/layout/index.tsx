@@ -6,10 +6,6 @@ import { MediaLogo } from "../ui/media-logos";
 import main from "../../styles/bulma.css";
 import css from "./index.css";
 
-type layoutProps = {
-  loading: boolean;
-};
-
 function Layout() {
   return (
     <div className={[main.container, css.root].join(" ")}>
