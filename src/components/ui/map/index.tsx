@@ -27,6 +27,8 @@ export function Map(props: mapProps) {
   mapboxgl.accessToken =
     "pk.eyJ1Ijoid2FzZDEyIiwiYSI6ImNrd2FvNmdrZjI1NjQycGxqZ29ldGEzaWYifQ.UDM7Ur0JGtFmJe3WPidyQQ";
 
+  console.log("component", mapboxgl.accessToken);
+
   const marker = new mapboxgl.Marker({
     anchor: "center",
     draggable: false,

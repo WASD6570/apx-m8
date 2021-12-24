@@ -1,6 +1,8 @@
 const MAPBOX_TOKEN =
   "pk.eyJ1Ijoid2FzZDEyIiwiYSI6ImNrd2FvNmdrZjI1NjQycGxqZ29ldGEzaWYifQ.UDM7Ur0JGtFmJe3WPidyQQ";
 
+console.log("lib", MAPBOX_TOKEN);
+
 async function fetchData(value: string, lat, lng): Promise<any> {
   try {
     const response = await fetch(
