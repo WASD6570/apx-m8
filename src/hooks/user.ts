@@ -7,16 +7,13 @@ import {
   useRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { logIn, mascotasCercaTuyo, getUserPets, createUser } from "../lib/api";
-import { useState, useCallback } from "react";
-
-function useForceUpdate() {
-  const [, setTick] = useState(0);
-  const update = useCallback(() => {
-    setTick((tick) => tick + 1);
-  }, []);
-  return update;
-}
+import {
+  logIn,
+  mascotasCercaTuyo,
+  getUserPets,
+  createUser,
+  API_BASE_URL,
+} from "../lib/api";
 
 type customRecoilState = {
   token: string;
@@ -197,6 +194,28 @@ function useResetUserData() {
   return reset;
 }
 
+const mapboxTokenState = atom({
+  key: "mapboxTokenState",
+  default: null,
+});
+
+const mapboxTokenRequest = selector({
+  key: "mapboxTokenRequest",
+  get: async ({ get }) => {
+    const tokenState = get(mapboxTokenState);
+    if (tokenState == null) {
+      const res = await fetch(`${API_BASE_URL}/api/mapbox-token`);
+      const token = await res.json();
+      return token.token;
+    } else return tokenState;
+  },
+});
+
+function useGetMapbox() {
+  const token = useRecoilValue(mapboxTokenRequest);
+  return token;
+}
+
 export {
   useSetUserData,
   useGetUserData,
@@ -208,5 +227,5 @@ export {
   useLogin,
   useResetUserData,
   useListenForUserPets,
-  useForceUpdate,
+  useGetMapbox,
 };

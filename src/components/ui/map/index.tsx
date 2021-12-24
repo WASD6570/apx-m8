@@ -5,7 +5,7 @@ import main from "../../../styles/bulma.css";
 import css from "./index.css";
 import { Buttons } from "../buttons";
 import { TextField } from "../text-field";
-import { useGetUserData } from "../../../hooks/user";
+import { useGetUserData, useGetMapbox } from "../../../hooks/user";
 import { initSearchForm } from "../../../lib/mapbox";
 
 type mapProps = {
@@ -14,6 +14,7 @@ type mapProps = {
 };
 
 export function Map(props: mapProps) {
+  const token = useGetMapbox();
   const userData = useGetUserData();
   const [search, setSearch] = useState("");
   const [lng, setLng] = useState(userData.lng);
@@ -24,8 +25,7 @@ export function Map(props: mapProps) {
   });
   const mapContainer = useRef(null);
   const map = useRef(null);
-  mapboxgl.accessToken =
-    "pk.eyJ1Ijoid2FzZDEyIiwiYSI6ImNrd2FvNmdrZjI1NjQycGxqZ29ldGEzaWYifQ.UDM7Ur0JGtFmJe3WPidyQQ";
+  mapboxgl.accessToken = token;
 
   console.log("component", mapboxgl.accessToken);
 
