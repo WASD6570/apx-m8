@@ -27,8 +27,6 @@ export function Map(props: mapProps) {
   const map = useRef(null);
   mapboxgl.accessToken = token;
 
-  console.log("component", mapboxgl.accessToken);
-
   const marker = new mapboxgl.Marker({
     anchor: "center",
     draggable: false,
@@ -85,7 +83,7 @@ export function Map(props: mapProps) {
   });
 
   useEffect(() => {
-    props.petLocationCb({ lat, lng });
+    props.petLocationCb((p) => ({ ...p, lat, lng }));
   }, [lat, lng]);
 
   return (

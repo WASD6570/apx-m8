@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import css from "./header.css";
 import main from "../../styles/bulma.css";
-import { useMountAuthForm } from "../../hooks/modal";
 import { LogInForm } from "../login/index";
 import { SignInForm } from "../signin";
 import { Logo } from "../ui/logo";
-import { useGetUserData, useResetUserData } from "../../hooks/user";
+import { useGetUserData, useCloseSession } from "../../hooks/user";
 import { BurgerMenu, AuthButton } from "../ui/buttons";
 import { Dashboard } from "../dashboard";
 import { useNavigate } from "react-router-dom";
@@ -13,15 +12,16 @@ import { useNavigate } from "react-router-dom";
 export function Header() {
   const data = useGetUserData();
   const navigate = useNavigate();
-  const reset = useResetUserData();
-  const [whichForm, setWichForm] = useMountAuthForm();
-  const form = whichForm ? <LogInForm /> : <SignInForm />;
+  const closeSession = useCloseSession();
+  const [whichForm, setWichForm] = useState(false);
+  const form = whichForm ? (
+    <LogInForm mountForm={setWichForm} />
+  ) : (
+    <SignInForm mountForm={setWichForm} />
+  );
 
   function handleCloseSession() {
-    navigate("/", { replace: true });
-    reset();
-    localStorage.removeItem("localData");
-    location.reload();
+    closeSession();
   }
 
   return (

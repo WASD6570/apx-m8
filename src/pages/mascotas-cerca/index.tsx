@@ -1,6 +1,6 @@
 import React from "react";
 import { useGetNearByPets } from "../../hooks/user";
-import { Card } from "../../components/ui/card";
+import { Card } from "../../components/card";
 import main from "../../styles/bulma.css";
 import css from "./index.css";
 

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import main from "../../../styles/bulma.css";
+import main from "../../styles/bulma.css";
 import css from "./index.css";
-import { Buttons } from "../buttons";
-import { ModalCard } from "../modal-card";
-import { TextField } from "../text-field";
-import { useSendReport } from "../../../hooks/report";
-import { useGetUserData } from "../../../hooks/user";
-import { EditableCard } from "../../editable-card";
+import { Buttons } from "../ui/buttons";
+import { ModalCard } from "../ui/modal-card";
+import { TextField } from "../ui/text-field";
+import { useSendReport } from "../../hooks/report";
+import { useGetUserData } from "../../hooks/user";
+import { EditableCard } from "../editable-card";
 
 type cardProps = {
-  pictureURL: string;
-  description: string;
-  name: string;
-  id: any;
+  pictureURL?: string;
+  description?: string;
+  name?: string;
+  id?: any;
   editable?: boolean;
   lat?: any;
   lng?: any;
@@ -109,16 +109,17 @@ export function Card(props: cardProps) {
                 title={"Editar"}
               >
                 <EditableCard
-                  // updatePagePets={props.updatePagePets}
+                  initialData={{
+                    id: props.id,
+                    description: props.description,
+                    name: props.name,
+                    pictureURL: props.pictureURL,
+                    picture: props.pictureURL,
+                    lat: props.lat,
+                    lng: props.lng,
+                  }}
                   showModal={setShowModal}
                   editPet={props.editable}
-                  name={props.name}
-                  description={props.description}
-                  picture={props.pictureURL}
-                  pictureURL={props.pictureURL}
-                  lat={props.lat}
-                  lng={props.lng}
-                  id={props.id}
                 />
               </ModalCard>
             ) : (

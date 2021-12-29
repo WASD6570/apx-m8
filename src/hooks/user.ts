@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   atom,
   selector,
@@ -21,6 +22,22 @@ type customRecoilState = {
   lng: number;
   email: string;
 };
+
+function loadLocalData() {
+  const dataTemplate = {
+    token: null,
+    lat: null,
+    lng: null,
+    email: null,
+  };
+  const localData = localStorage.getItem("localData");
+
+  if (localData === "{}") {
+    localStorage.setItem("localData", JSON.stringify(dataTemplate));
+  }
+
+  return localData != null ? JSON.parse(localData) : dataTemplate;
+}
 
 const userDataState = atom({
   key: "userDataState",
@@ -216,6 +233,18 @@ function useGetMapbox() {
   return token;
 }
 
+function useCloseSession() {
+  const navigate = useNavigate();
+  const reset = useResetUserData();
+  function execute() {
+    navigate("/", { replace: true });
+    reset();
+    localStorage.removeItem("localData");
+    location.reload();
+  }
+  return execute;
+}
+
 export {
   useSetUserData,
   useGetUserData,
@@ -228,4 +257,6 @@ export {
   useResetUserData,
   useListenForUserPets,
   useGetMapbox,
+  loadLocalData,
+  useCloseSession,
 };

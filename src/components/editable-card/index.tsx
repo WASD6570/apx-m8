@@ -2,22 +2,23 @@ import React, { useState, useEffect } from "react";
 import main from "../../styles/bulma.css";
 import { Buttons } from "../ui/buttons";
 import { TextField } from "../ui/text-field";
-import { useGetUserData, useGetUserPets } from "../../hooks/user";
+import { useGetUserData } from "../../hooks/user";
 import { Map } from "../ui/map";
 import { Dropzone } from "../dropzone";
 import { useCreatePet, useUpdatePet } from "../../hooks/pet";
 
 type editableCardProps = {
-  name?: string;
   editPet?: boolean;
-  description?: string;
-  lat?: number;
-  lng?: number;
-  picture?: string;
-  id?: any;
-  pictureURL?: string;
   showModal?: any;
-  updatePagePets?: any;
+  initialData?: {
+    id: any;
+    description: string;
+    name: string;
+    pictureURL: any;
+    picture: any;
+    lat: any;
+    lng: any;
+  };
 };
 
 export function EditableCard(props: editableCardProps) {
@@ -25,27 +26,25 @@ export function EditableCard(props: editableCardProps) {
   const createPet = useCreatePet();
   const updatePet = useUpdatePet();
 
-  const [name, setName] = useState("");
   const [files, setFiles] = useState([]);
-  const [description, setDescription] = useState("");
-  const [petLocation, setPetLocation] = useState({
+  const [data, setData] = useState({
+    name: "",
+    description: "",
     lat: userData.lat,
     lng: userData.lng,
+    picture: "",
   });
-  const [picture, setPicture] = useState("");
 
   useEffect(() => {
     if (props.editPet) {
-      setName(props.name);
-      setDescription(props.description);
-      setPicture(props.picture);
-      setPetLocation({ lat: props.lat, lng: props.lng });
+      setData(props.initialData);
     }
   }, []);
 
   function handleCreatePet(e) {
     try {
       e.preventDefault();
+      const { name, description, lat, lng, picture } = data;
       if (name.length == 0)
         return window.alert("Completá el nombre de tu mascota");
       if (description.length == 0)
@@ -56,8 +55,8 @@ export function EditableCard(props: editableCardProps) {
         description,
         petPicture: picture,
         isLost: true,
-        lng: petLocation.lng,
-        lat: petLocation.lat,
+        lng,
+        lat,
       });
     } catch (error) {
       return window.alert(error.message);
@@ -66,37 +65,39 @@ export function EditableCard(props: editableCardProps) {
 
   function handleUpdatePet(e) {
     e.preventDefault();
+    const { name, description, lat, lng, picture } = data;
     if (name.length == 0)
       return window.alert("Completá el nombre de tu mascota");
     if (description.length == 0)
       return window.alert("Completá la descripcion de tu mascota");
 
     updatePet({
-      petId: props.id,
+      petId: props.initialData.id,
       name,
       description,
       petPicture: picture,
       isLost: true,
-      lng: petLocation.lng,
-      lat: petLocation.lat,
+      lng,
+      lat,
     });
     props.showModal(false);
   }
 
   function handleUnpublishPet(e) {
     e.preventDefault();
+    const { name, description, lat, lng, picture } = data;
     if (name.length == 0)
       return window.alert("Completá el nombre de tu mascota");
     if (description.length == 0)
       return window.alert("Completá la descripcion de tu mascota");
     updatePet({
-      petId: props.id,
+      petId: props.initialData.id,
       name,
       description,
       petPicture: picture,
       isLost: false,
-      lng: petLocation.lng,
-      lat: petLocation.lat,
+      lng,
+      lat,
     });
     props.showModal(false);
   }
@@ -118,7 +119,10 @@ export function EditableCard(props: editableCardProps) {
             placeholder="Nombre de la mascota"
             styles={["input", "is-info"]}
             callback={(data) => {
-              setName(data);
+              setData((p) => ({
+                ...p,
+                name: data,
+              }));
             }}
             name="nombre"
           />
@@ -130,7 +134,10 @@ export function EditableCard(props: editableCardProps) {
             placeholder="Datos e informacion util para encontrar tu mascota..."
             styles={["textarea", "is-info"]}
             callback={(data) => {
-              setDescription(data);
+              setData((p) => ({
+                ...p,
+                description: data,
+              }));
             }}
             name="descripcion"
           />
@@ -138,7 +145,7 @@ export function EditableCard(props: editableCardProps) {
         <h2 className={[main["title"], main["is-5"], main["m-0"]].join(" ")}>
           ¿Donde se perdió?
         </h2>
-        <Map petLocationCb={setPetLocation} />
+        <Map petLocationCb={setData} />
         <label className={[main["label"], main.box].join(" ")}>
           <h2 className={[main["title"], main["is-5"], main["m-0"]].join(" ")}>
             Foto
@@ -151,11 +158,7 @@ export function EditableCard(props: editableCardProps) {
               : "Presioná acá para buscar una foto"}
           </p>
           <div className={[main["image"], main["is-2by1"]].join(" ")} id="dz-0">
-            <Dropzone
-              pictureCb={setPicture}
-              files={files}
-              setFiles={setFiles}
-            />
+            <Dropzone pictureCb={setData} files={files} setFiles={setFiles} />
           </div>
         </label>
         <div
@@ -177,7 +180,7 @@ export function EditableCard(props: editableCardProps) {
             click={(e) => {
               e.preventDefault();
               setFiles([]);
-              setPicture("");
+              setData((p) => ({ ...p, picture: "" }));
             }}
           />
           {props.editPet ? (

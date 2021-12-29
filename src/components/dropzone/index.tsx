@@ -3,7 +3,7 @@ import { useDropzone } from "react-dropzone";
 import css from "./index.css";
 
 type dzProps = {
-  pictureCb: (uri: string) => void;
+  pictureCb: (uri: any) => void;
   children?: Array<any>;
   setFiles: (array: Array<any>) => void;
   files: Array<any>;
@@ -50,7 +50,7 @@ export function Dropzone(props: dzProps) {
   );
 
   useEffect(() => {
-    props.pictureCb(uri);
+    props.pictureCb((p) => ({ ...p, picture: uri }));
   }, [uri]);
 
   return (

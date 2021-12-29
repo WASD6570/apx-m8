@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useMountAuthForm } from "../../hooks/modal";
 import { useSetUserData, useGetUserData, useSignin } from "../../hooks/user";
 import { ModalCard } from "../ui/modal-card";
 import { TextField } from "../ui/text-field";
@@ -13,7 +12,6 @@ export function SignInForm(props) {
   const [inputStyles, setInputStyles] = useState(["input", "mb-2", "is-info"]);
   const [passStyles, setPassStyles] = useState(["input", "mb-2", "is-info"]);
 
-  const [, mountForm] = useMountAuthForm();
   const setSigninData = useSignin();
 
   const validateEmail = (email) => {
@@ -25,7 +23,7 @@ export function SignInForm(props) {
   };
 
   function handleMountSignIn() {
-    mountForm(true);
+    props.mountForm(true);
   }
 
   function handleLogIn() {
