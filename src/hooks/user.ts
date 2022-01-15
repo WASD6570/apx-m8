@@ -177,23 +177,16 @@ const stateSelector = selector({
 // se ejecuta cada vez que el user entra a /mascotas-perdidas-cerca-tuyo
 // para tener la data actualizada
 
-const petsAround = selector({
-  key: "petsAround",
-  get: async ({ get }) => {
-    const lat = get(userDataState)["lat"];
-    const lng = get(userDataState)["lng"];
-    if (lat && lng) {
-      const pets = await mascotasCercaTuyo({ lat, lng });
-
-      return pets;
-    } else return;
-  },
-});
-// retorna las pets SI SOLO SI hay ubicacion disponible
-
 function useGetNearByPets() {
-  const pets = useRecoilValue(petsAround);
-  return pets;
+  const data = useGetUserData();
+  return async (): Promise<Array<any>> => {
+    try {
+      const pets = await mascotasCercaTuyo({ lat: data.lat, lng: data.lng });
+      return pets;
+    } catch (error) {
+      return [];
+    }
+  };
 }
 
 function useSetUserData() {

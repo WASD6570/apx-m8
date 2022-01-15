@@ -12,7 +12,7 @@ ReactDOM.render(
         set(userDataState, loadLocalData());
       }}
     >
-      <Suspense fallback={<Fallback loading={true} />}>
+      <Suspense fallback={<Fallback />}>
         <AppRoutes />
       </Suspense>
     </RecoilRoot>

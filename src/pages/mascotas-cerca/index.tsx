@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGetNearByPets } from "../../hooks/user";
 import { Card } from "../../components/card";
 import main from "../../styles/bulma.css";
 import css from "./index.css";
 
 function MascotasPerdidas() {
-  const pets = useGetNearByPets();
+  const [pets, setPets] = useState([]);
+  const getPets = useGetNearByPets();
+
+  useEffect(() => {
+    (async () => setPets(await getPets()))();
+  }, []);
 
   function handleUpdate() {
     location.reload();
@@ -26,10 +31,10 @@ function MascotasPerdidas() {
       </button>
       <div className={[css["card-container"]].join(" ")}>
         <ul>
-          {pets?.length < 1 ? (
+          {pets.length < 1 ? (
             <div>no hay mascotas cerca tuyo</div>
           ) : (
-            pets?.map((p) => {
+            pets.map((p) => {
               return (
                 <div key={p.objectID} className={[css["card"]].join(" ")}>
                   <Card

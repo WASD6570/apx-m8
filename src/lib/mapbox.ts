@@ -1,12 +1,13 @@
 import { API_BASE_URL } from "./api";
+// this endpoint is used to retrieve the mapbox token
 const get_MAPBOX_TOKEN = async () => {
   const res = await fetch(`${API_BASE_URL}/api/mapbox-token`);
   const token = await res.json();
   return token.token;
 };
-
 const MAPBOX_TOKEN = get_MAPBOX_TOKEN();
 
+// this function is used to fetch the data of the location that the user inputs
 async function fetchData(value: string, lat, lng): Promise<any> {
   try {
     const response = await fetch(

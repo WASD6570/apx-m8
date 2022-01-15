@@ -8,7 +8,7 @@ import header from "../../header/header.css";
 import fallback from "./index.css";
 import { Logo } from "../logo";
 
-export function Fallback(props) {
+export function Fallback() {
   return (
     <div className={[main.container, css.root].join(" ")}>
       <nav

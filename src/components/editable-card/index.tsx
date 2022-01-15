@@ -25,7 +25,6 @@ export function EditableCard(props: editableCardProps) {
   const userData = useGetUserData();
   const createPet = useCreatePet();
   const updatePet = useUpdatePet();
-
   const [files, setFiles] = useState([]);
   const [data, setData] = useState({
     name: "",
